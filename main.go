@@ -34,7 +34,10 @@ func main() {
 
 	userController := controllers.UserController{}
 	app.Get("/user/:id", userController.GetUserByID)
+	app.Get("/users", userController.GetAllUsers)
 	app.Post("/user", userController.CreateUser)
+	app.Delete("/user/:id", userController.DeleteUser)
+	app.Put("/user/update", userController.UpdateUser)
 
 	port := helpers.GetEnv("PORT_APPLICATION", "3000")
 	if err := app.Listen(":" + port); err != nil {

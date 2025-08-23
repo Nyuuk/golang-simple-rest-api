@@ -13,15 +13,17 @@ func Response(c *fiber.Ctx, status int, message string, data interface{}) error 
 	})
 }
 
-func ResponseErrorInternal(c *fiber.Ctx, err error) error {
-	return Response(c, fiber.StatusInternalServerError, "Internal server error", err.Error())
+func ResponseErrorInternal(c *fiber.Ctx, err any) error {
+
+	return Response(c, fiber.StatusInternalServerError, "Internal server error", nil)
 }
 
-func ResponseErrorBadRequest(c *fiber.Ctx, err error) error {
+func ResponseErrorBadRequest(c *fiber.Ctx, message string, err any) error {
 	log.Error("Bad request: ", err)
-	return Response(c, fiber.StatusBadRequest, "Bad request", nil)
+	return Response(c, fiber.StatusBadRequest, message, err)
 }
 
-func ResponseErrorNotFound(c *fiber.Ctx, err error) error {
+func ResponseErrorNotFound(c *fiber.Ctx, err any) error {
+	log.Error("Not found: ", err)
 	return Response(c, fiber.StatusNotFound, "Not found", nil)
 }

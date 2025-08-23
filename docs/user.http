@@ -4,6 +4,9 @@ GET http://localhost:3000/healthy
 ### Get User by ID
 GET http://localhost:3000/user/1
 
+### Get All Users
+GET http://localhost:3000/users
+
 ### Create User
 POST http://localhost:3000/user
 Content-Type: application/json
@@ -37,4 +40,17 @@ Content-Type: application/json
 
 {
     "email": "john.doe@example.com"
+}
+
+### Delete User
+DELETE http://localhost:3000/user/11
+
+### Update User
+PUT http://localhost:3000/user/update
+Content-Type: application/json
+
+{
+    "id": 1,
+    "email": "adnan@nyuuk.my.id",
+    "name": "Adnan Khafabi 1231231"
 }

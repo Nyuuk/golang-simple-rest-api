@@ -48,14 +48,32 @@ func (service UserService) GetUserByEmail(email string, user *entities.User, tx 
 	return service.userRepo.GetUserByEmail(email, user, tx, c)
 }
 
-func (service UserService) GetAllUsers(users *[]entities.User, tx *gorm.DB, c *fiber.Ctx) error {
-	return service.userRepo.GetAllUsers(users, tx, c)
+func (service UserService) GetAllUsers(tx *gorm.DB, c *fiber.Ctx) error {
+	var users []entities.User
+	err := service.userRepo.GetAllUsers(&users, tx, c)
+	if err != nil {
+		return err
+	}
+	return helpers.Response(c, fiber.StatusOK, "Users retrieved successfully", users)
 }
 
-func (service UserService) UpdateUser(user *entities.User, tx *gorm.DB, c *fiber.Ctx) error {
-	return service.userRepo.UpdateUser(user, tx, c)
+func (service UserService) UpdateUser(payload payloads.UpdateUserPayload, tx *gorm.DB, c *fiber.Ctx) error {
+	user := entities.User{
+		ID:    payload.ID,
+		Email: payload.Email,
+		Name:  payload.Name,
+	}
+	err := service.userRepo.UpdateUser(&user, tx, c)
+	if err != nil {
+		return err
+	}
+	return helpers.Response(c, fiber.StatusOK, "User updated successfully", user)
 }
 
 func (service UserService) DeleteUser(id uint, tx *gorm.DB, c *fiber.Ctx) error {
-	return service.userRepo.DeleteUser(id, tx, c)
+	err := service.userRepo.DeleteUser(id, tx, c)
+	if err != nil {
+		return err
+	}
+	return helpers.Response(c, fiber.StatusOK, "User deleted successfully", nil)
 }
