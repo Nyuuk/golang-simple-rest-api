@@ -31,6 +31,7 @@ func (controller UserController) CreateUser(c *fiber.Ctx) error {
 	// 	return helpers.Response(c, fiber.StatusBadRequest, "Invalid request body", err.Error())
 	// }
 
+	// using transaction
 	tx := database.ClientPostgres.Begin()
 	if err := controller.UserService.CreateUser(payload, c, tx); err != nil {
 		log.Error("Error creating user: ", err)
@@ -86,6 +87,7 @@ func (controller UserController) DeleteUser(c *fiber.Ctx) error {
 		return helpers.ResponseErrorBadRequest(c, "Invalid ID", err)
 	}
 
+	// doen't using transaction
 	if err := controller.UserService.DeleteUser(uint(idUint), database.ClientPostgres, c); err != nil {
 		log.Error("Error deleting user: ", err)
 		return helpers.ResponseErrorInternal(c, err)
@@ -118,6 +120,7 @@ func (controller UserController) UpdateUser(c *fiber.Ctx) error {
 		return err
 	}
 
+	// doen't using transaction
 	if err := controller.UserService.UpdateUser(payload, database.ClientPostgres, c); err != nil {
 		log.Error("Error updating user: ", err)
 		return helpers.ResponseErrorInternal(c, err)
